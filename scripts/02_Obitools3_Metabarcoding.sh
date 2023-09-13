@@ -1,3 +1,11 @@
+#Eldridge Wisely
+#2022-12-21
+#Eldridge.Wisely@gmail.com
+#This script takes the cleaned, annotated fastq files for both the crustacean and fish metabarcoding R1 and R2 files and metabarcodes them with the EMBL databases for invertebrates and vertebrates respectively
+
+#programs and versions
+obitools version 3
+
 #Obitools3 processing of Fish and crustaceans for NC_Sharks project
 
 cd 03_Obitools3_Results

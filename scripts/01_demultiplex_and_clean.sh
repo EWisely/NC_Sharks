@@ -1,10 +1,15 @@
+#Eldridge Wisely
+#2022-12-21
+#Eldridge.Wisely@gmail.com
+#This script takes the raw data from the UNC sequencing facility with MiFish primers and BerryCrust primers multiplexed together for each sample, and outputs 4 demultiplexed, cleaned, trimmed, annotated, and concatenated files to use as input for Obitools3 pipeline.
+
 #programs and versions
 obitools version 2
-obitools version 3
 cutadapt 4.1 with Python 3.9.2
-AdapterRemoval ver. 2.3.1
-FastQC v0.11.9
-multiqc, version 1.13
+
+#Optionally, To check if the cleaning works:
+#FastQC v0.11.9
+#multiqc, version 1.13
 
 #pre-processing steps:
 
