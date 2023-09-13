@@ -45,8 +45,8 @@ grep -c 'Micropogonias furnieri' MiFish_named.fasta
 #13
 #otutable for lulu
 obitab -o -d -n 0 MiFish_named.fasta >MiFish_named.tab
-grep -c 'Sphoeroides annulatus' MiFish_named.tab 
-#12
+grep -c 'Micropogonias furnieri' MiFish_named.tab 
+#13
 
 #make a new tab file with only the info Lulu wants.
 #I put the file into excel and added a row to count the field numbers to include MiFish_named_tab.xlsx
