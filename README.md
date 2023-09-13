@@ -1,2 +1,2 @@
 # NC_Sharks
- NC Shark Diet Metabarcoding with MiFish and BerryCrust primers
+ NC Shark Diet Metabarcoding with MiFish and Berry's Crustacean primers
