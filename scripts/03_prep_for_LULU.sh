@@ -4,8 +4,8 @@
 #This script takes the output fastas of Obitools3 for both the crustacean and fish metabarcoding sequences and creates input files for LULU.
 
 #programs and versions
-obitools version 2
-blast version 2.12.0
+#obitools version 2
+#blast version 2.12.0
 
 #change MOTU identifiers to a short unique identifier with the primer name 
 cd 04_LULU_Results
