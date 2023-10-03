@@ -1,2 +1,7 @@
 # NC_Sharks
- NC Shark Diet Metabarcoding with MiFish and Berry's Crustacean primers
+Code for Shark Diet Metabarcoding from fecal swabs vs. stomach contents[^1]. 
+
+
+[^1]: Ryburn, Wisely et al. (in preparation).
+
+
