@@ -6,3 +6,4 @@
 */.DS_Store
 data/*/*.fasta
 data/*/*.fastq
+scripts/How_I_Broke_Pantheras_Conda_10-7-2023.txt
