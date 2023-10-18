@@ -7,7 +7,7 @@ message: >-
   If you use this code, please cite it using the metadata
   from this file and the associated journal article by Ryburn et. al and check for additional citations for the
   software and R packages you use as part of this workflow.
-type: manual
+type: software-code
 authors:
   - given-names: Eldridge
     family-names: Wisely
