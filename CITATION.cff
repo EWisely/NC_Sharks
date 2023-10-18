@@ -21,7 +21,7 @@ abstract: >-
   and one for crustaceans) in shark fecal swabs.  Associated
   data were collected by Ryburn et. al (publication
   forthcoming).  This citation is only for the code used to
-  run the pipeline.
+  run the pipeline. Please be sure to credit developers of the packages and software used herein.
 keywords:
   - metabarcoding
   - shark diet
