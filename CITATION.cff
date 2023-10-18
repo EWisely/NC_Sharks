@@ -2,7 +2,7 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: A Metabarcoding Analysis Pipeline for Shark Diets
+title: Metabarcoding Analysis Pipeline for Shark Diets
 message: >-
   If you use this code, please cite it using the metadata
   from this file, and check for additional citations for the
