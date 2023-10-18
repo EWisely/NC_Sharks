@@ -1,0 +1,29 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: A Metabarcoding Analysis Pipeline for Shark Diets
+message: >-
+  If you use this code, please cite it using the metadata
+  from this file, and check for additional citations for the
+  software and R packages you use as part of this workflow.
+type: software
+authors:
+  - given-names: Eldridge
+    family-names: Wisely
+    email: Eldridgewisely@arizona.edu
+    affiliation: University of Arizona
+    orcid: 'https://orcid.org/0009-0001-2784-4778'
+repository-code: 'https://github.com/EWisely/NC_Sharks'
+abstract: >-
+  This code uses existing software and packages for
+  metabarcoding analysis of two primer sets (one for fish,
+  and one for crustaceans) in shark fecal swabs.  Associated
+  data were collected by Ryburn et. al (publication
+  forthcoming).  This citation is only for the code used to
+  run the pipeline.
+keywords:
+  - metabarcoding
+  - shark diet
+  - fecal swab
+license: MIT
