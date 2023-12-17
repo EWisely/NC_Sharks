@@ -7,14 +7,18 @@ library(devtools)
 require(lulu)
 library(phyloseq)
 
+
+#work in same RProject where script 04_lulu_metabaR_BerryCrust_NC_Sharks.R was run.  
+
+#the first thing is to load the environment results of the metabaR analysis of the Berry Crustacean reads.
 load("After_BerryCrust_obi3_lulu_metabaR.RData")
 
-setwd("~/Desktop/Savannah/following_obitools3_method/MiFish_pureobi3_lulu_metabar")
+#make sure the MiFish results of script 03_prep_for_LULU.sh are in the current working directory and then load them.
 
-#First, lulu curation of obi3 results file.
+#Step 1: lulu curation of obi3 results file.
 
 #(not matching merged obi3 sequences back to the results for the lulu step, just results-results for matchlist and results otutable)
-otutab <- read.csv("MiFish_named_tab_LULU.txt", sep='\t', header=TRUE, as.is=TRUE, row.names = 1) #was made using the obi3 merged reads matched against the obi3 results 
+otutab <- read.csv("MiFish_named_tab_LULU.txt", sep='\t', header=TRUE, as.is=TRUE, row.names = 1) 
 matchlist <- read.table("MiFish_named_matchlist.txt", header=FALSE, as.is=TRUE, stringsAsFactors=FALSE)
 curated_result <- lulu(otutab, matchlist)
 
