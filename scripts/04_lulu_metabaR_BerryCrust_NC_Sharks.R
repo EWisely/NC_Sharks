@@ -7,7 +7,7 @@ library(devtools)
 require(lulu)
 library(phyloseq)
 
-Work in an Rproject with the results of script 03_prep_for_LULU.sh inside it.
+#Work in an Rproject with the results of script 03_prep_for_LULU.sh inside it.
 
 
 #First, lulu curation of obi3 results file.
