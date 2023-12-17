@@ -7,13 +7,13 @@ library(devtools)
 require(lulu)
 library(phyloseq)
 
-setwd("~/Desktop/Savannah/following_obitools3_method/results_obi3-12-21-22")
+Work in an Rproject with the results of script 03_prep_for_LULU.sh inside it.
 
 
 #First, lulu curation of obi3 results file.
 
 #(not matching merged obi3 sequences back to the results for the lulu step, just results-results for matchlist and results otutable)
-otutab <- read.csv("BerryCrust_named_tab_LULU.txt", sep='\t', header=TRUE, as.is=TRUE, row.names = 1) #was made using the obi3 merged reads matched against the obi3 results 
+otutab <- read.csv("BerryCrust_named_tab_LULU.txt", sep='\t', header=TRUE, as.is=TRUE, row.names = 1) 
 matchlist <- read.table("BerryCrust_named_matchlist.txt", header=FALSE, as.is=TRUE, stringsAsFactors=FALSE)
 curated_result <- lulu(otutab, matchlist)
 
@@ -510,7 +510,8 @@ ggplot(tmp2, aes(x=as.factor(threshold), y=value)) +
 
 #Removed 28 rows containing non-finite values (`stat_boxplot()`).
 
-#Did this to the semi-cleaned NC_BerryCrust1 metabarlist to get the MFneglevel of contamination out of the BCneg samples.
+#Did this to the semi-cleaned NC_BerryCrust1 metabarlist to get the MFneglevel of contamination out of the BCneg samples. 
+#Here, we are going to remove all reads with abundance below the threshold of the abundance of MiFish reads in the BerryCrust negative PCR control.
 
 # Define a vector of thresholds to test
 thresholds <- c(0,1e-4,1e-3, 1e-2, 2e-2,3e-2, 5e-2) 
