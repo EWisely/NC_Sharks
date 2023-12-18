@@ -354,29 +354,37 @@ display: none;
 
 <div id="nc_sharks" class="section level1">
 <h1>NC_Sharks</h1>
-<p>Code used in NC_Sharks project <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> for shark diet metabarcoding from fecal
-swabs and stomach contents. The laboratory protocol for creating these
-data can be found on protocols.io at DOI:
+<p>Here is the code used in NC_Sharks project <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> for shark diet
+metabarcoding from fecal swabs and stomach contents. The laboratory
+protocol for creating these data can be found on protocols.io at DOI:
 dx.doi.org/10.17504/protocols.io.ewov1qxokgr2/v1.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> This github repo
-covers the analysis steps and contains 6 scripts to be used in order: 1)
-01_demultiplex_and_clean.sh demultiplexes the two metabarcoding primers
-we used: MiFish<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> and Berry’s crustacean primer (BerryCrust
+covers the analysis steps and contains 6 scripts to be used in
+order.</p>
+<p>Each script contains commented lines that will help to understand
+what each section of code does, and these comments point out key
+parameters which should be edited to adapt to different analyses and
+projects.</p>
+<ol style="list-style-type: decimal">
+<li>01_demultiplex_and_clean.sh demultiplexes the two metabarcoding
+primers we used: MiFish<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> and Berry’s crustacean primer (BerryCrust
 in our code)<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> and removes the adapters from the raw data
 from the MiSeq machine using Adapterama iNext primers <a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> and Illumina overhang
-adapters<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. 2) 02_Obitools3_Metabarcoding.sh takes the
-cleaned, annotated R1 and R2 fastq files for both the crustaceans and
-fishes and metabarcodes them using Obitools3<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> for merging, initial
-filtering, and cleaning with obiclean to determine the “head” sequences
-(MOTUs) to be taxonomically identified, then compares these obicleaned
-“head” sequences to the EMBL databases for invertebrates and vertebrates
+adapters<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>.</li>
+<li>02_Obitools3_Metabarcoding.sh takes the cleaned, annotated R1 and R2
+fastq files for both the crustaceans and fishes and metabarcodes them
+using Obitools3<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> for merging, initial filtering, and
+cleaning with obiclean to determine the “head” sequences (MOTUs) to be
+taxonomically identified, then compares these obicleaned “head”
+sequences to the EMBL databases for invertebrates and vertebrates
 respectively using the ecopcr<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> and ecotag functions. The outputs are
-crustaceans_results.fasta and fish_results.fasta 3) 03_prep_for_LULU.sh
-uses the output fasta files of taxonomically identified MOTUs from
-Obitools3 as input, and uses Obitools (version 2), and BLAST<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>,<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a> to
-create the input files for the R<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a> scripts. The output files from this
-script are: MiFish_named_matchlist.txt, MiFish_named_tab_LULU.txt,
-BerryCrust_named_matchlist.txt, and BerryCrust_named_tab_LULU.txt 4)
-04_lulu_metabaR_BerryCrust_NC_Sharks.R takes as input
+crustaceans_results.fasta and fish_results.fasta</li>
+<li>03_prep_for_LULU.sh uses the output fasta files of taxonomically
+identified MOTUs from Obitools3 as input, and uses Obitools (version 2),
+and BLAST<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>,<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a> to create the input files for the R<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a>
+scripts. The output files from this script are:
+MiFish_named_matchlist.txt, MiFish_named_tab_LULU.txt,
+BerryCrust_named_matchlist.txt, and BerryCrust_named_tab_LULU.txt</li>
+<li>04_lulu_metabaR_BerryCrust_NC_Sharks.R takes as input
 BerryCrust_named_matchlist.txt, BerryCrust_named_tab_LULU.txt,
 containing the metabarcoding results, and
 MetabaR_formatted_samples_NCSharks.txt, and
@@ -387,7 +395,23 @@ Phyloseq<a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a> R pa
 metabarcoding MOTUs to remove spurious signal using data from negative
 controls, replicates, sequencing depth, and sequence similarity scores.
 The results of this script are the final crustacean reads from the fecal
-and stomach samples. 5)</p>
+and stomach samples.</li>
+<li>05_lulu_Metabar_MiFish_and_combined_NCSharks.R takes as input
+MiFish_named_matchlist.txt, MiFish_named_tab_LULU.txt, and the metadata
+files and the output R environment of
+04_lulu_metabaR_BerryCrust_NC_Sharks.R to curate the MiFish MOTUs with
+their own filtering parameters, and for each species of shark sampled,
+removes the associated congener MOTUs from downstream diet analyses.
+This script then merges the MiFish and Crustacean_16S data back together
+for each sample and results in a single phyloseq object (NC_Sharks.ps)
+for downstream analysis.</li>
+<li>06_Phyloseq_NC_Sharks.R sorts, normalizes, and does exploratory
+statistics and visualizations of the data. This is the stage at which
+all of the MOTUs representing a single species are aggregated, and
+differences among sample types and species are explored. Sørensen
+distances between fecal swabs and the associated stomach samples of each
+individual are calculated and visualized as well.</li>
+</ol>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr />
