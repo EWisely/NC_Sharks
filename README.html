@@ -397,20 +397,20 @@ controls, replicates, sequencing depth, and sequence similarity scores.
 The results of this script are the final crustacean reads from the fecal
 and stomach samples.</li>
 <li>05_lulu_Metabar_MiFish_and_combined_NCSharks.R takes as input
-MiFish_named_matchlist.txt, MiFish_named_tab_LULU.txt, and the metadata
-files and the output R environment of
-04_lulu_metabaR_BerryCrust_NC_Sharks.R to curate the MiFish MOTUs with
+MiFish_named_matchlist.txt, MiFish_named_tab_LULU.txt, the metadata
+files, and the output R environment of
+04_lulu_metabaR_BerryCrust_NC_Sharks.R. It curates the MiFish MOTUs with
 their own filtering parameters, and for each species of shark sampled,
 removes the associated congener MOTUs from downstream diet analyses.
 This script then merges the MiFish and Crustacean_16S data back together
 for each sample and results in a single phyloseq object (NC_Sharks.ps)
-for downstream analysis.</li>
+for further analysis and visualization.</li>
 <li>06_Phyloseq_NC_Sharks.R sorts, normalizes, and does exploratory
 statistics and visualizations of the data. This is the stage at which
-all of the MOTUs representing a single species are aggregated, and
-differences among sample types and species are explored. Sørensen
-distances between fecal swabs and the associated stomach samples of each
-individual are calculated and visualized as well.</li>
+all of the MOTUs representing a single prey species are aggregated, and
+differences among sample types and shark species are explored. Sørensen
+distances between fecal swabs and their associated stomach samples for
+each individual are calculated and visualized as well.</li>
 </ol>
 </div>
 <div class="footnotes footnotes-end-of-document">
