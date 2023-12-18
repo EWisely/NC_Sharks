@@ -355,14 +355,39 @@ display: none;
 <div id="nc_sharks" class="section level1">
 <h1>NC_Sharks</h1>
 <p>Code used in NC_Sharks project <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> for shark diet metabarcoding from fecal
-swabs vs. stomach contents. The laboratory protocol for creating these
+swabs and stomach contents. The laboratory protocol for creating these
 data can be found on protocols.io at DOI:
 dx.doi.org/10.17504/protocols.io.ewov1qxokgr2/v1.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> This github repo
-covers the analysis steps including: 1) demultiplexing the two
-metabarcoding primers we used: MiFish<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> and Berry’s crustacean primer (BerryCrust
-in our code)<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> 2) removing the adapters from the raw data
+covers the analysis steps and contains 6 scripts to be used in order: 1)
+01_demultiplex_and_clean.sh demultiplexes the two metabarcoding primers
+we used: MiFish<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> and Berry’s crustacean primer (BerryCrust
+in our code)<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> and removes the adapters from the raw data
 from the MiSeq machine using Adapterama iNext primers <a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> and Illumina overhang
-adapters<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. 3)</p>
+adapters<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. 2) 02_Obitools3_Metabarcoding.sh takes the
+cleaned, annotated R1 and R2 fastq files for both the crustaceans and
+fishes and metabarcodes them using Obitools3<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> for merging, initial
+filtering, and cleaning with obiclean to determine the “head” sequences
+(MOTUs) to be taxonomically identified, then compares these obicleaned
+“head” sequences to the EMBL databases for invertebrates and vertebrates
+respectively using the ecopcr<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> and ecotag functions. The outputs are
+crustaceans_results.fasta and fish_results.fasta 3) 03_prep_for_LULU.sh
+uses the output fasta files of taxonomically identified MOTUs from
+Obitools3 as input, and uses Obitools (version 2), and BLAST<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>,<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a> to
+create the input files for the R<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a> scripts. The output files from this
+script are: MiFish_named_matchlist.txt, MiFish_named_tab_LULU.txt,
+BerryCrust_named_matchlist.txt, and BerryCrust_named_tab_LULU.txt 4)
+04_lulu_metabaR_BerryCrust_NC_Sharks.R takes as input
+BerryCrust_named_matchlist.txt, BerryCrust_named_tab_LULU.txt,
+containing the metabarcoding results, and
+MetabaR_formatted_samples_NCSharks.txt, and
+MetabaR_formatted_pcrs_NCSharks_BerryCrust.txt containing metadata
+collected during shark captures, and during the library building process
+respectively. Using LULU<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a>,<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>, taxonomizr <a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a>, MetabaR<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a>, and
+Phyloseq<a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a> R packages, it curates and cleans the
+metabarcoding MOTUs to remove spurious signal using data from negative
+controls, replicates, sequencing depth, and sequence similarity scores.
+The results of this script are the final crustacean reads from the fecal
+and stomach samples. 5)</p>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr />
@@ -388,6 +413,42 @@ Daniel E. Lefever, et al. 2019. “Adapterama II: Universal Amplicon
 Sequencing on Illumina Platforms (TaggiMatrix).” PeerJ 2019 (10). <a href="https://doi.org/10.7717/peerj.7786" class="uri">https://doi.org/10.7717/peerj.7786</a>.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
 <li id="fn6"><p>“16S Metagenomic Sequencing Library Preparation.” 2013.
 Illumina. <a href="https://support.illumina.com/content/dam/illumina-support/documents/documentation/chemistry_documentation/16s/16s-metagenomic-library-prep-guide-15044223-b.pdf" class="uri">https://support.illumina.com/content/dam/illumina-support/documents/documentation/chemistry_documentation/16s/16s-metagenomic-library-prep-guide-15044223-b.pdf</a>.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>Boyer F, Mercier C, Bonin A, Le Bras Y, Taberlet P,
+Coissac E: OBITools: a Unix-inspired software package for DNA
+metabarcoding. Mol Ecol Resour, 2016: 176-182.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>Ficetola, Gentile Francesco, Eric Coissac, Stéphanie
+Zundel, Tiayyba Riaz, Wasim Shehzad, Julien Bessière, Pierre Taberlet,
+and François Pompanon. 2010. “An In Silico Approach for the Evaluation
+of DNA Barcodes.” BMC Genomics 11 (July): 434.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>Altschul, S. F., W. Gish, W. Miller, E. W. Myers, and D.
+J. Lipman. 1990. “Basic Local Alignment Search Tool.” Journal of
+Molecular Biology 215 (3): 403–10. <a href="https://doi.org/10.1016/S0022-2836(05)80360-2" class="uri">https://doi.org/10.1016/S0022-2836(05)80360-2</a>.<a href="#fnref9" class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>Camacho, Christiam, George Coulouris, Vahram Avagyan,
+Ning Ma, Jason Papadopoulos, Kevin Bealer, and Thomas L. Madden. 2009.
+“BLAST+: Architecture and Applications.” BMC Bioinformatics 10 (1): 421.
+<a href="https://doi.org/10.1186/1471-2105-10-421" class="uri">https://doi.org/10.1186/1471-2105-10-421</a>.<a href="#fnref10" class="footnote-back">↩︎</a></p></li>
+<li id="fn11"><p>R Core Team (2022). R: A language and environment for
+statistical computing. R Foundation for Statistical Computing, Vienna,
+Austria. URL <a href="https://www.R-project.org/" class="uri">https://www.R-project.org/</a>.<a href="#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>Guldberg Frøslev T (2022). <em>lulu: Post Clustering
+Curation of Amplicon Data for Reliable Biodiversity Metrics</em>. R
+package version 0.1.0.<a href="#fnref12" class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>Frøslev, Tobias Guldberg, Rasmus Kjøller, Hans Henrik
+Bruun, Rasmus Ejrnæs, Ane Kirstine Brunbjerg, Carlotta Pietroni, and
+Anders Johannes Hansen. 2017. “Algorithm for Post-Clustering Curation of
+DNA Amplicon Data Yields Reliable Biodiversity Estimates.” Nature
+Communications 8 (1). <a href="https://doi.org/10.1038/s41467-017-01312-x" class="uri">https://doi.org/10.1038/s41467-017-01312-x</a>.<a href="#fnref13" class="footnote-back">↩︎</a></p></li>
+<li id="fn14"><p>Sherrill-Mix S (2023). <em>taxonomizr: Functions to
+Work with NCBI Accessions and Taxonomy</em>. R package version 0.10.2,
+<a href="https://CRAN.R-project.org/package=taxonomizr" class="uri">https://CRAN.R-project.org/package=taxonomizr</a>.<a href="#fnref14" class="footnote-back">↩︎</a></p></li>
+<li id="fn15"><p>Lucie Zinger, Clément Lionnet, Anne-Sophie Benoiston,
+Julian Donald, Céline Mercier, Frédéric Boyer (2021). metabaR : an R
+package for the evaluation and improvement of DNA metabarcoding data
+quality. Methods in Ecology and Evolution; doi: <a href="https://doi.org/10.1111/2041-210X.13552" class="uri">https://doi.org/10.1111/2041-210X.13552</a><a href="#fnref15" class="footnote-back">↩︎</a></p></li>
+<li id="fn16"><p>McMurdie, Paul J., and Susan Holmes. 2013. “Phyloseq:
+An R Package for Reproducible Interactive Analysis and Graphics of
+Microbiome Census Data.” Edited by Michael Watson. PLoS ONE 8 (4):
+e61217. <a href="https://doi.org/10.1371/journal.pone.0061217" class="uri">https://doi.org/10.1371/journal.pone.0061217</a>.<a href="#fnref16" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
