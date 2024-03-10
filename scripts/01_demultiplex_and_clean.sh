@@ -39,6 +39,7 @@ mkdir cutadapt
 #Cleaning and trimming the crustacean reads
 while read line; do
 cutadapt -q 20 --trim-n --minimum-length 10 -a CTTTAGGGATAACAGCGTAATNNN -A TATAGGGTCTTATCGTCCCNNN -G NNNATTACGCTGTTATCCCTAAAG -g AGATGTGTATAAGAGACAG -G AGATGTGTATAAGAGACAG -a CTGTCTCTTATACACATCTCCGAGCCCACGAGAC -a CCGAGCCCACGAGAC -a ATCTCGTATGCCGTCTTCTGCTTG -A CTGTCTCTTATACACATCTGACGCTGCCGACGA -A GACGCTGCCGACGA -A GTGTAGATCTCGGTGGTCGCCGTATCATT -e .1 -o "cutadapt/""$line""_BerryCrust_R1.cleaned.fastq" -p "cutadapt/""$line""_BerryCrust_R2.cleaned.fastq" "$line""_R1_BerryCrust.fastq" "$line""_R2_BerryCrust.fastq"; done < ../Sample_list.txt
+#Download the NexteraPE-PE.fa from Trimmomatic's website and put it here.  (Also available in this github: data/Nextera_adapters/NexteraPE-PE.fa)
 
 mkdir trimmed
 

@@ -7,14 +7,14 @@ library(devtools)
 require(lulu)
 library(phyloseq)
 
-#Work in an Rproject with the results of script 03_prep_for_LULU.sh inside it.
+#Work in an Rproject in a project directory with a directory called data/04_LULU_inputs with the results of script 03_prep_for_LULU.sh inside it.  (i.e. NC-Sharks-diet/data/04_LULU_inputs, NC-Sharks-diet/NC_Sharks.Rproj, NC-Sharks-diet/scripts/04_lulu_metabaR_BerryCrust_NC_SHARKS.R)
 
 
 #First, lulu curation of obi3 results file.
 
 #(not matching merged obi3 sequences back to the results for the lulu step, just results-results for matchlist and results otutable)
-otutab <- read.csv("BerryCrust_named_tab_LULU.txt", sep='\t', header=TRUE, as.is=TRUE, row.names = 1) 
-matchlist <- read.table("BerryCrust_named_matchlist.txt", header=FALSE, as.is=TRUE, stringsAsFactors=FALSE)
+otutab <- read.csv("data/04_LULU_inputs/BerryCrust_named_tab_LULU.txt", sep='\t', header=TRUE, as.is=TRUE, row.names = 1) 
+matchlist <- read.table("data/04_LULU_inputs/BerryCrust_named_matchlist.txt", header=FALSE, as.is=TRUE, stringsAsFactors=FALSE)
 curated_result <- lulu(otutab, matchlist)
 
 curated_result$curated_table # Curated OTU table
@@ -28,7 +28,7 @@ curated_result$otu_map # total - total read count, spread - the number of sample
 # rank - The rank of the OTU in terms of decreasing spread and read count
 
 curated_result$original_table # Original OTU table
-write.csv(curated_result$curated_table,"lulu_curated_BerryCrust_named.tab")
+write.csv(curated_result$curated_table,"data/05_MetabaR_inputs/lulu_curated_BerryCrust_named.tab")
 
 
 #Phyloseq section
@@ -41,16 +41,16 @@ library("tibble")       # Needed for converting column to row names
 
 #otus
 BerryCrust_lulu_table<-otu_table(curated_result$curated_table, taxa_are_rows = TRUE)
-Metabar_formatted_samples<-read.csv("../MetabaR/MetabaR_formatted_samples_NCSharks.txt", sep="\t")
+Metabar_formatted_samples<-read.csv("data/05_MetabaR_inputs/MetabaR_formatted_samples_NCSharks.txt", sep="\t")
 
 #samples
-Metabar_formatted_pcrs<-read.csv("../MetabaR/MetabaR_formatted_pcrs_NCSharks_BerryCrust.txt", sep="\t")
+Metabar_formatted_pcrs<-read.csv("data/05_MetabaR_inputs/MetabaR_formatted_pcrs_NCSharks_BerryCrust.txt", sep="\t")
 samples.df<-full_join(Metabar_formatted_pcrs,Metabar_formatted_samples,by="sample_id")
 
 BerryCrust_sample_data<-sample_data(samples.df)
 
 #taxonomy
-BerryCrust_named_obi3_results<-read.csv("BerryCrust_named.tab", sep="\t")
+BerryCrust_named_obi3_results<-read.csv("data/05_MetabaR_inputs/BerryCrust_named.tab", sep="\t")
 BerryCrust_named_obi3_results<-BerryCrust_named_obi3_results%>% select(id, BEST_IDENTITY, TAXID, SCIENTIFIC_NAME, ID_STATUS)
 
 #install.packages("taxonomizr")
@@ -76,6 +76,7 @@ taxa.df.lulu<- semi_join(taxa.df,BerryCrust_lulu_table.df,by="id")
 #do something about the negatives
 
 #Metabar!
+library(metabaR)
 
 #format the motus
 #taxa.df.lulu has the right motus and taxonomic levels, BerryCrust_named_obi3_motus has the rest of the info I want but too many motus join by ="id"
@@ -128,10 +129,10 @@ Metabar_formatted_pcrs<-column_to_rownames(Metabar_formatted_pcrs, var="sample")
 #same error but pcrs had St9 and reads did not.  So I removed the St9 row from pcrs and saved as Metabar_formatted_pcrs_pureobi3_lulu_noSt9.txt
 
 NC_BerryCrust<-tabfiles_to_metabarlist(
-  file_reads= "Metabar_formatted_reads_pureobi3_lulu.txt",
-  file_motus= "Metabar_formatted_motus_pureobi3_lulu.txt",
-  file_pcrs ="Metabar_formatted_pcrs_pureobi3_lulu_noSt9.txt",
-  file_samples ="MetabaR_formatted_samples_NCSharks.txt",
+  file_reads= "data/05_MetabaR_inputs/Metabar_formatted_reads_BerryCrust_lulu.txt",
+  file_motus= "data/05_MetabaR_inputs/Metabar_formatted_motus_BerryCrust_lulu.txt",
+  file_pcrs ="data/05_MetabaR_inputs/Metabar_formatted_pcrs_BerryCrust_lulu_noSt9.txt",
+  file_samples ="data/05_MetabaR_inputs/MetabaR_formatted_samples_NCSharks.txt",
   files_sep = "\t"
 )
 
@@ -916,10 +917,10 @@ summary_metabarlist(NC_BerryCrust_Negatives)
 
 
 #write results to 4 csvs
-write.csv(NC_BerryCrust_clean$reads, "NC_BerryCrust_obi3_lulu_metabar_reads.csv")
-write.csv(NC_BerryCrust_clean$motus, "NC_BerryCrust_obi3_lulu_metabar_motus.csv")
-write.csv(NC_BerryCrust_clean$pcrs, "NC_BerryCrust_obi3_lulu_metabar_pcrs.csv")
-write.csv(NC_BerryCrust_clean$samples, "NC_BerryCrust_obi3_lulu_metabar_samples.csv")
+write.csv(NC_BerryCrust_clean$reads, "data/06_MetabaR_results/NC_BerryCrust_obi3_lulu_metabar_reads.csv")
+write.csv(NC_BerryCrust_clean$motus, "data/06_MetabaR_results/NC_BerryCrust_obi3_lulu_metabar_motus.csv")
+write.csv(NC_BerryCrust_clean$pcrs, "data/06_MetabaR_results/NC_BerryCrust_obi3_lulu_metabar_pcrs.csv")
+write.csv(NC_BerryCrust_clean$samples, "data/06_MetabaR_results/NC_BerryCrust_obi3_lulu_metabar_samples.csv")
 
 #Make a csv that substitutes motus$SCIENTIFIC_NAME for motu_id and puts it as colnames with pcr$rownames and read_numbers from NC_BerryCrust_clean$reads
 NC_BerryCrust_clean$pcrs$species <-
