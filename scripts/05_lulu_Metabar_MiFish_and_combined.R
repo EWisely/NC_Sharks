@@ -936,10 +936,10 @@ ggdraw() +
 #in the end I went with 0.04% cutoff for tagjumps and 98% similarity.
 
 #write results to 4 csvs
-write.csv(NC_MiFish_clean$reads, "NC_MiFish_obi3_lulu_metabar_reads.csv")
-write.csv(NC_MiFish_clean$motus, "NC_MiFish_obi3_lulu_metabar_motus.csv")
-write.csv(NC_MiFish_clean$pcrs, "NC_MiFish_obi3_lulu_metabar_pcrs.csv")
-write.csv(NC_MiFish_clean$samples, "NC_MiFish_obi3_lulu_metabar_samples.csv")
+write.csv(NC_MiFish_clean$reads, "data/06_MetabaR_results/NC_MiFish_obi3_lulu_metabar_reads.csv")
+write.csv(NC_MiFish_clean$motus, "data/06_MetabaR_results/NC_MiFish_obi3_lulu_metabar_motus.csv")
+write.csv(NC_MiFish_clean$pcrs, "data/06_MetabaR_results/NC_MiFish_obi3_lulu_metabar_pcrs.csv")
+write.csv(NC_MiFish_clean$samples, "data/06_MetabaR_results/NC_MiFish_obi3_lulu_metabar_samples.csv")
 
 #donor shark motus will make the different species fall out differently from each other on the PCA plot but removing them will help show the differences in their diets.
 
@@ -1173,32 +1173,32 @@ summary_metabarlist(bonnetheads)
 #Write 4 separate files for each donor species
 
 #blacknose
-write.csv(NC_MiFish_C.acronotus_no_cannibals$reads, "NC_MiFish_C.acronotus_no_cannibals_metabar_reads.csv")
-write.csv(NC_MiFish_C.acronotus_no_cannibals$motus, "NC_MiFish_C.acronotus_no_cannibals_metabar_motus.csv")
-write.csv(NC_MiFish_C.acronotus_no_cannibals$pcrs, "NC_MiFish_C.acronotus_no_cannibals_metabar_pcrs.csv")
-write.csv(NC_MiFish_C.acronotus_no_cannibals$samples, "NC_MiFish_C.acronotus_no_cannibals_metabar_samples.csv")
+write.csv(NC_MiFish_C.acronotus_no_cannibals$reads, "data/06_MetabaR_results/NC_MiFish_C.acronotus_no_cannibals_metabar_reads.csv")
+write.csv(NC_MiFish_C.acronotus_no_cannibals$motus, "data/06_MetabaR_results/NC_MiFish_C.acronotus_no_cannibals_metabar_motus.csv")
+write.csv(NC_MiFish_C.acronotus_no_cannibals$pcrs, "data/06_MetabaR_results/NC_MiFish_C.acronotus_no_cannibals_metabar_pcrs.csv")
+write.csv(NC_MiFish_C.acronotus_no_cannibals$samples, "data/06_MetabaR_results/NC_MiFish_C.acronotus_no_cannibals_metabar_samples.csv")
 
 
 
 
 #blacktips
-write.csv(NC_MiFish_C.limbatus_no_cannibals$reads, "NC_MiFish_C.limbatus_no_cannibals_metabar_reads.csv")
-write.csv(NC_MiFish_C.limbatus_no_cannibals$motus, "NC_MiFish_C.limbatus_no_cannibals_metabar_motus.csv")
-write.csv(NC_MiFish_C.limbatus_no_cannibals$pcrs, "NC_MiFish_C.limbatus_no_cannibals_metabar_pcrs.csv")
-write.csv(NC_MiFish_C.limbatus_no_cannibals$samples, "NC_MiFish_C.limbatus_no_cannibals_metabar_samples.csv")
+write.csv(NC_MiFish_C.limbatus_no_cannibals$reads, "data/06_MetabaR_results/NC_MiFish_C.limbatus_no_cannibals_metabar_reads.csv")
+write.csv(NC_MiFish_C.limbatus_no_cannibals$motus, "data/06_MetabaR_results/NC_MiFish_C.limbatus_no_cannibals_metabar_motus.csv")
+write.csv(NC_MiFish_C.limbatus_no_cannibals$pcrs, "data/06_MetabaR_results/NC_MiFish_C.limbatus_no_cannibals_metabar_pcrs.csv")
+write.csv(NC_MiFish_C.limbatus_no_cannibals$samples, "data/06_MetabaR_results/NC_MiFish_C.limbatus_no_cannibals_metabar_samples.csv")
 
 #sharpnose
-write.csv(NC_MiFish_R.terraenovae_no_cannibals$reads, "NC_MiFish_R.terraenovae_no_cannibals_metabar_reads.csv")
-write.csv(NC_MiFish_R.terraenovae_no_cannibals$motus, "NC_MiFish_R.terraenovae_no_cannibals_metabar_motus.csv")
-write.csv(NC_MiFish_R.terraenovae_no_cannibals$pcrs, "NC_MiFish_R.terraenovae_no_cannibals_metabar_pcrs.csv")
-write.csv(NC_MiFish_R.terraenovae_no_cannibals$samples, "NC_MiFish_R.terraenovae_no_cannibals_metabar_samples.csv")
+write.csv(NC_MiFish_R.terraenovae_no_cannibals$reads, "data/06_MetabaR_results/NC_MiFish_R.terraenovae_no_cannibals_metabar_reads.csv")
+write.csv(NC_MiFish_R.terraenovae_no_cannibals$motus, "data/06_MetabaR_results/NC_MiFish_R.terraenovae_no_cannibals_metabar_motus.csv")
+write.csv(NC_MiFish_R.terraenovae_no_cannibals$pcrs, "data/06_MetabaR_results/NC_MiFish_R.terraenovae_no_cannibals_metabar_pcrs.csv")
+write.csv(NC_MiFish_R.terraenovae_no_cannibals$samples, "data/06_MetabaR_results/NC_MiFish_R.terraenovae_no_cannibals_metabar_samples.csv")
 
 
 #bonnetheads
-write.csv(NC_MiFish_S.tiburo_no_cannibals$reads, "NC_MiFish_S.tiburo_no_cannibals_metabar_reads.csv")
-write.csv(NC_MiFish_S.tiburo_no_cannibals$motus, "NC_MiFish_S.tiburo_no_cannibals_metabar_motus.csv")
-write.csv(NC_MiFish_S.tiburo_no_cannibals$pcrs, "NC_MiFish_S.tiburo_no_cannibals_metabar_pcrs.csv")
-write.csv(NC_MiFish_S.tiburo_no_cannibals$samples, "NC_MiFish_S.tiburo_no_cannibals_metabar_samples.csv")
+write.csv(NC_MiFish_S.tiburo_no_cannibals$reads, "data/06_MetabaR_results/NC_MiFish_S.tiburo_no_cannibals_metabar_reads.csv")
+write.csv(NC_MiFish_S.tiburo_no_cannibals$motus, "data/06_MetabaR_results/NC_MiFish_S.tiburo_no_cannibals_metabar_motus.csv")
+write.csv(NC_MiFish_S.tiburo_no_cannibals$pcrs, "data/06_MetabaR_results/NC_MiFish_S.tiburo_no_cannibals_metabar_pcrs.csv")
+write.csv(NC_MiFish_S.tiburo_no_cannibals$samples, "data/06_MetabaR_results/NC_MiFish_S.tiburo_no_cannibals_metabar_samples.csv")
 
 #combine all MiFish "no cannibals" metabar reads files with the final BerryCrust reads file
 
@@ -1285,16 +1285,16 @@ df.NC_Sharks_results_merged_samples1<-df.NC_Sharks_results_merged_samples %>% di
 
 
 df.NC_Sharks_results_merged_samples1<-column_to_rownames(df.NC_Sharks_results_merged_samples1, var="sample_id")
-write.csv(df.NC_Sharks_results_merged_samples1, "NC_Sharks_merged_final_samples.csv")
+write.csv(df.NC_Sharks_results_merged_samples1, "data/06_MetabaR_results/NC_Sharks_merged_final_samples.csv")
 
 
 
 #bring back into metabar for the full dataset PCA plot.
 NC_Combined<-tabfiles_to_metabarlist(
-  file_reads= "NC_Sharks_merged_final_reads_NAto0.csv",
-  file_motus= "NC_Sharks_merged_final_motus_cleared_tags.csv",
-  file_pcrs ="NC_Sharks_merged_final_pcrs.csv",
-  file_samples ="NC_Sharks_merged_final_samples.csv",
+  file_reads= "data/06_MetabaR_results/NC_Sharks_merged_final_reads_NAto0.csv",
+  file_motus= "data/06_MetabaR_results/NC_Sharks_merged_final_motus_cleared_tags.csv",
+  file_pcrs ="data/06_MetabaR_results/NC_Sharks_merged_final_pcrs.csv",
+  file_samples ="data/06_MetabaR_results/NC_Sharks_merged_final_samples.csv",
   files_sep = ","
 )
 
@@ -1356,12 +1356,12 @@ ggdraw() +
   draw_plot(c + guides(color=F, shape=F), x=0, y=0, width = .75, height = 1) +
   draw_grob(leg, x=.4, y=0)
 
-ggsave("PCA_of_NC_Sharks_Diets.jpg")
+ggsave("data/07_Phyloseq_results_and_Visualizations/PCA_of_NC_Sharks_Diets.jpg")
 
 
 
 #Save R Global Environment
-#save.image(file = "Combined_MiFish_and_NC_Sharks_Rglobalenvironment.RData")
+#save.image(file = "data/06_MetabaR_results/Combined_MiFish_and_NC_Sharks_Rglobalenvironment.RData")
 
 
 
@@ -1378,7 +1378,7 @@ ggsave("PCA_of_NC_Sharks_Diets.jpg")
 #merge_phyloseq - Can take any number of phyloseq objects and/or phyloseq components, and attempts to combine them into one larger phyloseq object. This is most-useful for adding separately-imported components to an already-created phyloseq object.
 
 
-load("Combined_MiFish_and_NC_Sharks_Rglobalenvironment.RData")
+load("data/06_MetabaR_results/Combined_MiFish_and_NC_Sharks_Rglobalenvironment.RData")
 #otu table
 
 clean.otu.df<-as.data.frame(t(NC_Combined1$reads))
@@ -1415,9 +1415,10 @@ clean.otu.mat<-as.matrix(clean.otu.df)
 clean.taxa.mat<-as.matrix(taxa.df)
 
 #Save and Load R Global Environment
-#save.image(file = "NC_Sharks_ready_for_phyloseq.RData")
-load("NC_Sharks_ready_for_phyloseq.RData")
+#save.image(file = "data/06_MetabaR_results/NC_Sharks_ready_for_phyloseq.RData")
+load("data/06_MetabaR_results/NC_Sharks_ready_for_phyloseq.RData")
 
+library(phyloseq)
 #Starting Phlyoseq!
 NC_Sharks.ps<- phyloseq(otu_table(clean.otu.mat, taxa_are_rows = TRUE), 
                          sample_data(samples.df), 
