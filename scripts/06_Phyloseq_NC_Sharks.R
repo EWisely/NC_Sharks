@@ -98,6 +98,8 @@ plot_ordination(NC_Sharks.ps,NC_Sharks.ps.ord , type="material", color="Species.
                 shape="material", title="biplot", label = "material") +  
   geom_point(size=3)
 
+#### Make a Final Taxa Table with the number of reads assigned to each genus or species ####
+
 #This is the most important part to me to make the otu table readable.
 #merge motus by prey species
 NC_Shark_prey_species_merge.ps <- tax_glom(NC_Sharks.ps, taxrank = "species", NArm = FALSE)
@@ -139,9 +141,9 @@ colnames(df2)
 df3<- df2 %>% select(-"type",-"plate_no",-"plate_col.x",-"plate_row",-"tag_fwd",-"tag_rev",-"primer_fwd.x",-"primer_rev.x",-"project",-"control_type",-"nb_reads.x",-"nb_motus.x",-"low_contamination_level.x",-"seqdepth_ok.x",-"nb_reads_postmetabaR.x",-"nb_motus_postmetabaR.x",-"date_collected.x",-"species.x",-"plate_col.y",-"primer_fwd.y",-"primer_rev.y",-"nb_reads.y",-"nb_motus.y",-"low_contamination_level.y",-"seqdepth_ok.y",-"nb_reads_postmetabaR.y",-"nb_motus_postmetabaR.y",-"date_collected.y",-"species.y")
 colnames(df3)
 
-write.csv(df3, "NC_Sharks_samples_by_species_combined_table.csv")
+write.csv(df3, "data/07_Phyloseq_results_and_Visualizations/NC_Sharks_samples_by_species_combined_table.csv")
 
-
+#### Done making final taxa table ####
 
 #NC_Shark_prey_species_merge.ps
 #phyloseq-class experiment-level object
