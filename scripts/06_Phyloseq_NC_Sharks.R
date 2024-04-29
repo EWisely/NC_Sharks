@@ -98,6 +98,8 @@ plot_ordination(NC_Sharks.ps,NC_Sharks.ps.ord , type="material", color="Species.
                 shape="material", title="biplot", label = "material") +  
   geom_point(size=3)
 
+
+
 #### Make a Final Taxa Table with the number of reads assigned to each genus or species ####
 
 #This is the most important part to me to make the otu table readable.
@@ -152,6 +154,27 @@ write.csv(df3, "data/07_Phyloseq_results_and_Visualizations/NC_Sharks_samples_by
 #tax_table()   Taxonomy Table:    [ 53 taxa by 7 taxonomic ranks ]
 
 #Make a subset with only paired fecals/stomachs
+NC_Sharks_paired.ps<-subset_samples(NC_Sharks.ps,Paired=="Yes")
+NC_Sharks_paired.ps
+
+paired_ASVs<-as.data.frame(NC_Sharks_paired.ps@tax_table)
+library(tidyverse)
+
+paired_ASVs<-paired_ASVs%>%
+  mutate(taxon_name=
+           coalesce(species,genus,family,order,class,phylum))
+
+summary_paired_ASVs <- paired_ASVs |> 
+  group_by(taxon_name) |> 
+  summarize(number_of_ASVs = n())
+mean(summary_paired_ASVs$number_of_ASVs)
+median(summary_paired_ASVs$number_of_ASVs)
+range(summary_paired_ASVs$number_of_ASVs)
+
+
+write.csv(summary_paired_ASVs, file= "data/07_Phyloseq_results_and_Visualizations/summary_ASVs_per_taxon_paired.csv")
+
+
 NC_Shark_prey_species_merge_paired.ps<-subset_samples(NC_Shark_prey_species_merge.ps,Paired=="Yes")
 
 NC_Shark_prey_species_merge_paired.ps
