@@ -1,4 +1,4 @@
-# NC_Sharks [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10397881.svg)](https://doi.org/10.5281/zenodo.10397881)
+# NC_Sharks [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10397880.svg)](https://doi.org/10.5281/zenodo.10397880)
 Here is the code used in NC_Sharks project [^1] for shark diet metabarcoding from fecal swabs and stomach contents. The laboratory protocol for creating these data can be found on protocols.io at DOI: dx.doi.org/10.17504/protocols.io.ewov1qxokgr2/v1.[^2] The raw data and metadata for the paired fecal and stomach samples can be downloaded from Figshare: (link will be published upon publication).  This github repo covers the analysis steps and contains 6 scripts to be used in order.
 
 Each script contains commented lines that will help to understand what each section of code does, and these comments point out key parameters which should be edited to adapt to different analyses and projects.
