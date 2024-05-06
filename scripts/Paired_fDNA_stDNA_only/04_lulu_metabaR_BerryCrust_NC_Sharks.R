@@ -1,9 +1,9 @@
 #Metabar of lulu curated obitools3 results 
 #12-21-22
 
-install.packages("devtools")
+#install.packages("devtools")
 library(devtools)
-install_github("tobiasgf/lulu")
+#install_github("tobiasgf/lulu")
 require(lulu)
 library(phyloseq)
 
@@ -22,8 +22,8 @@ library(metabaR)
 #First, lulu curation of obi3 results file.
 
 #(not matching merged obi3 sequences back to the results for the lulu step, just results-results for matchlist and results otutable)
-otutab <- read.csv("data/04_LULU_inputs/BerryCrust_named_tab_LULU.txt", sep='\t', header=TRUE, as.is=TRUE, row.names = 1) 
-matchlist <- read.table("data/04_LULU_inputs/BerryCrust_named_matchlist.txt", header=FALSE, as.is=TRUE, stringsAsFactors=FALSE)
+otutab <- read.csv("../Paired_only/03_Obitools3_Results/BerryCrust_named_tab_LULU.txt", sep='\t', header=TRUE, as.is=TRUE, row.names = 1) 
+matchlist <- read.table("../Paired_only/03_Obitools3_Results/BerryCrust_named_matchlist.txt", header=FALSE, as.is=TRUE, stringsAsFactors=FALSE)
 curated_result <- lulu(otutab, matchlist)
 
 curated_result$curated_table # Curated OTU table
@@ -37,7 +37,7 @@ curated_result$otu_map # total - total read count, spread - the number of sample
 # rank - The rank of the OTU in terms of decreasing spread and read count
 
 curated_result$original_table # Original OTU table
-write.csv(curated_result$curated_table,"data/05_MetabaR_inputs/lulu_curated_BerryCrust_named.tab")
+write.csv(curated_result$curated_table,"data/Paired/05_MetabaR_inputs/lulu_curated_BerryCrust_named.tab")
 
 
 #Phyloseq section
@@ -50,17 +50,17 @@ library("tibble")       # Needed for converting column to row names
 
 #otus
 BerryCrust_lulu_table<-otu_table(curated_result$curated_table, taxa_are_rows = TRUE)
-Metabar_formatted_samples<-read.csv("data/05_MetabaR_inputs/MetabaR_formatted_samples_NCSharks.txt", sep="\t")
+Metabar_formatted_samples<-read_delim("../Paired_only/Paired_MetabaR_formatted_samples_NCSharks.txt")
 
 #samples
-Metabar_formatted_pcrs<-read.csv("data/05_MetabaR_inputs/MetabaR_formatted_pcrs_NCSharks_BerryCrust.txt", sep="\t")
-samples.df<-full_join(Metabar_formatted_pcrs,Metabar_formatted_samples,by="sample_id")
+Metabar_formatted_pcrs<-read_delim("../Paired_only/Paired_Metabar_formatted_PCRs.txt")
+samples.df<-unique(full_join(Metabar_formatted_pcrs,Metabar_formatted_samples,by="sample_id"))
 
 BerryCrust_sample_data<-sample_data(samples.df)
 
 #taxonomy
-BerryCrust_named_obi3_results<-read.csv("data/05_MetabaR_inputs/BerryCrust_named.tab", sep="\t")
-BerryCrust_named_obi3_results<-BerryCrust_named_obi3_results%>% select(id, BEST_IDENTITY, TAXID, SCIENTIFIC_NAME, ID_STATUS)
+BerryCrust_named_obi3_results<-read.csv("../Paired_only/03_Obitools3_Results/BerryCrust_named.tab", sep="\t")
+BerryCrust_named_obi3_results<-BerryCrust_named_obi3_results%>% select(id, BEST_IDENTITY, TAXID, SCIENTIFIC_NAME, ID_STATUS,sequence)
 
 #install.packages("taxonomizr")
 library(taxonomizr)
@@ -100,7 +100,27 @@ Metabar_formatted_reads<-t(BerryCrust_lulu_table.df)
 
 Metabar_formatted_reads<-as.data.frame(Metabar_formatted_reads)
 
+#########
+
+
+reads_colnames<-colnames(Metabar_formatted_reads)
+reads_rownames<-rownames(Metabar_formatted_reads)
+
+#fix the accidental replacement of - with . 
+reads_colnames <- sapply(reads_colnames, gsub, pattern = ".", replacement = "-", fixed = TRUE)
+reads_rownames <- sapply(reads_rownames, gsub, pattern = ".", replacement = "-", fixed =TRUE)
+
+#put it in a numerical matrix then put the rownames and colnames back on
+
+
 Metabar_formatted_reads<-as.matrix(Metabar_formatted_reads)
+
+colnames(Metabar_formatted_reads)<-reads_colnames
+rownames(Metabar_formatted_reads)<-reads_rownames
+
+#######
+
+Metabar_formatted_samples<-unique(Metabar_formatted_samples)
 
 Metabar_formatted_samples<-column_to_rownames(Metabar_formatted_samples, var="sample_id")
 
@@ -108,60 +128,13 @@ Metabar_formatted_pcrs<-column_to_rownames(Metabar_formatted_pcrs, var="sample")
 
 
 
-#NC_BerryCrust<-metabarlist_generator(reads=Metabar_formatted_reads, Metabar_formatted_motus, pcrs=Metabar_formatted_pcrs, samples=Metabar_formatted_samples)
-#this seems to work, but doesn't identify any pcr contaminants which makes me distrust it, so, I'm going to export to csv and look at them in excel and reimport with tabfilestometabarlist
+NC_BerryCrust<-metabarlist_generator(reads=Metabar_formatted_reads, Metabar_formatted_motus, pcrs=Metabar_formatted_pcrs, samples=Metabar_formatted_samples)
 
-#write.csv(Metabar_formatted_reads, "Metabar_formatted_reads_pureobi3_lulu.csv")
-#write.csv(Metabar_formatted_motus, "Metabar_formatted_motus_pureobi3_lulu.csv")
-#write.csv(Metabar_formatted_pcrs, "Metabar_formatted_pcrs_pureobi3_lulu.csv")
-#write.csv(Metabar_formatted_samples, "Metabar_formatted_samples_pureobi3_lulu.csv")
-
-
-#samples file has lots of extra periods in it and the first line doesn't say sample_id, so I saved MetabaR_formatted_samples_NCSharks.txt to this folder to use instead.
-#pcrs file looked exactly the same as a previous one I used for MiFish analysis except the first column label was gone so I put it back and saved it as a tab delimited text. Metabar_formatted_pcrs_pureobi3_lulu.txt
-#motus needed some rearranging to make it like one of the MiFish ones that worked in the past.  I put the count field second and made it "count" instead of "COUNT", then the second field is seq_length and I calculated that in excel from the sequence field, which I put at the end of the taxonomy fields. Saved as Metabar_formatted_motus_pureobi3_lulu.txt
-#reads all looked good so I saved as Metabar_formatted_reads_pureobi3_lulu.txt
-
-#tabfiles_to_metabarlist(
-#  file_reads= "Metabar_formatted_reads_pureobi3_lulu.txt",
-#  file_motus= "Metabar_formatted_motus_pureobi3_lulu.txt",
-#  file_pcrs ="Metabar_formatted_pcrs_pureobi3_lulu.txt",
-#  file_samples ="MetabaR_formatted_samples_NCSharks.txt",
-#  files_sep = "\t"
-#)
-``#Error in tabfiles_to_metabarlist(file_reads = "Metabar_formatted_reads_pureobi3_lulu.txt",  : 
-#cannot continue, rownames in reads are not part of rownames of pcrs
-
-#looked at these two and added sample to the beginning of the reads file to match PCRs, and sorted them both alphabetically so they match.  Motus wasn't sorted alphabetically to begin with.
-
-#same error but pcrs had St9 and reads did not.  So I removed the St9 row from pcrs and saved as Metabar_formatted_pcrs_pureobi3_lulu_noSt9.txt
-
-NC_BerryCrust<-tabfiles_to_metabarlist(
-  file_reads= "data/05_MetabaR_inputs/Metabar_formatted_reads_BerryCrust_lulu.txt",
-  file_motus= "data/05_MetabaR_inputs/Metabar_formatted_motus_BerryCrust_lulu.txt",
-  file_pcrs ="data/05_MetabaR_inputs/Metabar_formatted_pcrs_BerryCrust_lulu_noSt9.txt",
-  file_samples ="data/05_MetabaR_inputs/MetabaR_formatted_samples_NCSharks.txt",
-  files_sep = "\t"
-)
-
-#same error so I copied the pcrs entries and pasted into a new file saved under the same name in case there was a weird empty row or something.
-#still same error
-#copied and pasted reads even though I hadn't messed with that.
-#same error
-#deleted "sample" from the first rowname of each, and still got the same error.
-#aha! reads says St#.St# and pcrs says St#-St#!  changed reads to "-"instead of ".".
-
-#yay! got rid of that error!
-
-#now, Error in check_metabarlist(out) : 
-#table `motus` in out has empty column names
-
-#I added id to the first column name of the otus.
-#still the same problem.
-#deleted the empty COUNT column that I had cut and pasted the contents of.
-
-#fixed! Finally no errors!
-
+#Write formatted intermediary files
+write.csv(Metabar_formatted_reads, "data/Paired/05_MetabaR_inputs/BerryCrust_Metabar_formatted_reads.csv")
+write_delim(Metabar_formatted_motus, "data/Paired/05_MetabaR_inputs/BerryCrust_Metabar_formatted_motus.txt")
+write_delim(Metabar_formatted_pcrs, "data/Paired/05_MetabaR_inputs/BerryCrust_Metabar_formatted_pcrs.txt")
+write_delim(Metabar_formatted_samples, "data/Paired/05_MetabaR_inputs/BerryCrust_Metabar_formatted_samples.txt")
 
 
 #Arguments
@@ -283,7 +256,7 @@ table(NC_BerryCrust$pcrs$low_contamination_level) / nrow(NC_BerryCrust$pcrs)
 #Whatever metabarcoding pipeline hasn't done that yet isn't worth it's salt IMO
 
 #Flag MOTUs corresponding to target (TRUE) vs. non-target (FALSE) taxa 
-NC_BerryCrust$motus$target_taxon <- grepl("TRUE", NC_BerryCrust$motus$ID_STATUS)#I changed this from Eukaryota and path because I am using the obitools3 results instead of the sintax vsearch results
+NC_BerryCrust$motus$target_taxon <- grepl("True", NC_BerryCrust$motus$ID_STATUS)#I changed this from Eukaryota and path because I am using the obitools3 results instead of the sintax vsearch results
 
 # Proportion of each of these over total number of MOTUs
 table(NC_BerryCrust$motus$target_taxon) / nrow(NC_BerryCrust$motus)
@@ -331,7 +304,7 @@ a <-
 # Same for the weighted distribution
 b <- 
   ggplot(NC_BerryCrust1$motus, 
-         aes(x=BEST_IDENTITY, y = after_stat(count), weight = count)) + 
+         aes(x=BEST_IDENTITY, y = after_stat(count), weight = COUNT)) + 
   geom_histogram(color="grey", fill="white", bins=20) + 
   geom_vline(xintercept = 0.97, col="orange", lty=2) + 
   theme_bw() + 
@@ -375,8 +348,6 @@ table(NC_BerryCrust$motus$target_taxon,
       NC_BerryCrust$motus$not_a_pcr_conta, 
       NC_BerryCrust$motus$not_degraded)
 
-
-#THIS LEAVES 20 MOTUS! CHECK THE TAXA AND SEE IF A 97% SIMILARITY VALUE IS BETTER.
 
 #Moving on to detecting PCR outliers by sequencing depth
 ggplot(NC_BerryCrust$pcrs, aes(nb_reads)) +
@@ -911,7 +882,7 @@ summary_metabarlist(NC_BerryCrust_Fecals)
 negative_control_id<- grepl("BC", rownames(NC_BerryCrust_clean$pcrs))
 NC_BerryCrust_BC_Negatives <- subset_metabarlist(NC_BerryCrust_clean, table = "pcrs", indices = negative_control_id)  
 summary_metabarlist(NC_BerryCrust_BC_Negatives)
-#hmm 72 motus, 39.5 average!
+
 
 #now just subset the negative pcr controls
 negative_control_id<- grepl("neg", rownames(NC_BerryCrust_clean$pcrs))
@@ -921,14 +892,13 @@ summary_metabarlist(NC_BerryCrust_Negatives)
 #View(NC_BerryCrust_Negatives[["motus"]])
 #View(NC_BerryCrust_Negatives[["pcrs"]])
 #View(NC_BerryCrust_Negatives[["reads"]])
-#YAYAYAYAYAY zero motus or reads in the negatives.
 
 
 #write results to 4 csvs
-write.csv(NC_BerryCrust_clean$reads, "data/06_MetabaR_results/NC_BerryCrust_obi3_lulu_metabar_reads.csv")
-write.csv(NC_BerryCrust_clean$motus, "data/06_MetabaR_results/NC_BerryCrust_obi3_lulu_metabar_motus.csv")
-write.csv(NC_BerryCrust_clean$pcrs, "data/06_MetabaR_results/NC_BerryCrust_obi3_lulu_metabar_pcrs.csv")
-write.csv(NC_BerryCrust_clean$samples, "data/06_MetabaR_results/NC_BerryCrust_obi3_lulu_metabar_samples.csv")
+write.csv(NC_BerryCrust_clean$reads, "data/Paired/06_Metabar_results/NC_BerryCrust_obi3_lulu_metabar_reads.csv")
+write.csv(NC_BerryCrust_clean$motus, "data/Paired/06_Metabar_results/NC_BerryCrust_obi3_lulu_metabar_motus.csv")
+write.csv(NC_BerryCrust_clean$pcrs, "data/Paired/06_Metabar_results/NC_BerryCrust_obi3_lulu_metabar_pcrs.csv")
+write.csv(NC_BerryCrust_clean$samples, "data/Paired/06_Metabar_results/NC_BerryCrust_obi3_lulu_metabar_samples.csv")
 
 #Make a csv that substitutes motus$SCIENTIFIC_NAME for motu_id and puts it as colnames with pcr$rownames and read_numbers from NC_BerryCrust_clean$reads
 NC_BerryCrust_clean$pcrs$species <-
@@ -970,105 +940,4 @@ df5<-column_to_rownames(.data = df4, var = "SampleID")
 
 df6<- t(df5)
 #df6<-left_join(df5, NC_BerryCrust_clean$motus)
-write.csv(df5, "NC_BerryCrust_clean_species_by_sample_obi3.csv")
-
-
-
-
-
-
-
-#Phyloseq!
-#otu_table - Works on any numeric matrix. You must also specify if the species are rows or columns
-#sample_data - Works on any data.frame. The rownames must match the sample names in the otu_table if you plan to combine them as a phyloseq-object
-#tax_table - Works on any character matrix. The rownames must match the OTU names (taxa_names) of the otu_table if you plan to combine it with a phyloseq-object.
-#phyloseq - Takes as argument an otu_table and any unordered list of valid phyloseq components: sample_data, tax_table, phylo, or XStringSet. The tip labels of a phylo-object (tree) must match the OTU names of the otu_table, and similarly, the sequence names of an XStringSet object must match the OTU names of the otu_table.
-#merge_phyloseq - Can take any number of phyloseq objects and/or phyloseq components, and attempts to combine them into one larger phyloseq object. This is most-useful for adding separately-imported components to an already-created phyloseq object.
-
-
-#otu_mat <- otu_mat %>%
-#  tibble::column_to_rownames("otu")  already imported from lulu
-#otu_mat<- as.matrix(otu_mat)
-#clean.otu.df<-as.data.frame(t(NC_BerryCrust_clean$reads))
-clean.otu.df<-as.data.frame(t(tmp3$reads))
-clean.otu.df<-rownames_to_column(clean.otu.df, var="id")
-
-clean.taxa.df<-rownames_to_column(taxa.df.lulu, var="id")
-clean.taxa.df<-inner_join(clean.taxa.df,clean.otu.df, by ="id")
-#the command above creates a table with taxonomy and number of times each taxa appears in each sample!
-clean.taxa.df<-clean.taxa.df[1:8]
-clean.taxa.df <- clean.taxa.df %>% 
-  tibble::column_to_rownames("id")
-samples.df <- samples.df %>% 
-  tibble::column_to_rownames("sample") 
-
-clean.taxa.mat <- as.matrix(clean.taxa.df)
-clean.otu.df<-column_to_rownames(clean.otu.df, var="id")
-clean.otu.mat<-as.matrix(clean.otu.df)
-
-clean.pcrs.df<-as.data.frame((NC_BerryCrust_clean$pcrs))
-clean.pcrs.df<-rownames_to_column(clean.pcrs.df, var = "sample")
-clean.samples.metabar.df<-rownames_to_column(as.data.frame(NC_BerryCrust_clean$samples),var = "sample_id")
-
-
-  samples.df.metabar<-full_join(clean.pcrs.df, clean.samples.metabar.df, by= "sample_id")
-
-  samples.df.metabar<-column_to_rownames(samples.df.metabar, var="sample")
-  
-  
-  
- #Starting Phlyoseq!
-BerryCrust.ps<- phyloseq(otu_table(clean.otu.mat, taxa_are_rows = TRUE), 
-               sample_data(samples.df.metabar), 
-               tax_table(clean.taxa.mat))
-
-BerryCrust.ps
-sample_names(BerryCrust.ps)
-rank_names(BerryCrust.ps)
-sample_variables(BerryCrust.ps)
-
-write.csv(clean.otu.df, "ready_for_phyloseq_otus_no_empty_pcrs.csv")
-write.csv(samples.df.metabar, "ready_for_phyloseq_samples.csv")
-write.csv(clean.taxa.df, "ready_for_phyloseq_taxa.csv")
-
-BerryCrust.ps
-#phyloseq-class experiment-level object
-#otu_table()   OTU Table:         [ 148 taxa and 102 samples ]
-#sample_data() Sample Data:       [ 102 samples by 50 sample variables ]
-#tax_table()   Taxonomy Table:    [ 148 taxa by 7 taxonomic ranks ]
-#when it says taxa it means motus
-
-plot_richness(BerryCrust.ps, x="material", measures=c("Shannon", "Simpson"), color="material")
-
-
-# Transform data to proportions as appropriate for Bray-Curtis distances
-BerryCrust.ps.prop <- transform_sample_counts(BerryCrust.ps, function(otu) otu/sum(otu))
-ord.nmds.bray <- ordinate(BerryCrust.ps.prop, method="NMDS", distance="bray")
-
-#Error in if (autotransform && xam > 50) { : 
-#missing value where TRUE/FALSE needed
-
-#solved this error by using tmp3(otus from metabar with no empty pcrs (reads>0)) but then got this warning: Warning message:
-#In metaMDS(veganifyOTU(physeq), distance, ...) :
-#  stress is (nearly) zero: you may have insufficient data
-
-plot_ordination(BerryCrust.ps.prop, ord.nmds.bray, color="species", title="Bray NMDS")
-#what does this mean?! changed color to species.
-
-top20 <- names(sort(taxa_sums(BerryCrust.ps), decreasing=TRUE))[0:20]
-ps.top20 <- transform_sample_counts(BerryCrust.ps, function(OTU) OTU/sum(OTU))
-ps.top20 <- prune_taxa(top20, ps.top20)
-plot_bar(ps.top20, x="Type", fill="Species") + facet_wrap(~Type, scales="free_x")
-#Warning message:
-#In psmelt(physeq) : The sample variables: 
-#species
-#have been renamed to: 
-#  sample_species
-#to avoid conflicts with taxonomic rank names.
-
-#Normalize number of reads in each sample using median sequencing depth.
-total = median(sample_sums(BerryCrust.ps))
-standf = function(x, t=total) round(t * (x / sum(x)))
-BerryCrust.ps = transform_sample_counts(BerryCrust.ps, standf)
-
-plot_bar(BerryCrust.ps, fill = "genus", facet_grid = "sample_species")
+write.csv(df5, "data/Paired/NC_BerryCrust_clean_species_by_sample_obi3.csv")

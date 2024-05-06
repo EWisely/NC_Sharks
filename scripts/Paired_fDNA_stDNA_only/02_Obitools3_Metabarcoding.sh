@@ -9,12 +9,14 @@
 #Obitools3 processing of Fish and crustaceans for NC_Sharks project (full dataset)
 
 cd 03_Obitools3_Results
-#activate obitools3 environment, then:
+#activate obitools3 environment, 
+conda activate obi3
+#then:
 #Following the tutorial on https://git.metabarcoding.org/obitools/obitools3/-/wikis/Wolf-tutorial-with-the-OBITools3
 
 #Import reads
-obi import ../02_Data_Clean/NC-BerryCrust_annotated_R1.fastq crustaceans/reads1
-obi import ../02_Data_Clean/NC-BerryCrust_annotated_R2.fastq crustaceans/reads2
+obi import ../02_Data_Clean/Paired_NC-BerryCrust_annotated_R1.fastq crustaceans/reads1
+obi import ../02_Data_Clean/Paired_NC-BerryCrust_annotated_R2.fastq crustaceans/reads2
 
 #Align forward and reverse reads into full sequences
 obi alignpairedend -R crustaceans/reads2 crustaceans/reads1 crustaceans/aligned_reads
@@ -78,7 +80,7 @@ obi history -d crustaceans/cleaned_sequences_d1_r.5 > crustaceans_one_view.dot
 #open crustaceans.png &
 
 #Export crustaceans_results.fasta
-obi export --fasta-output crustaceans/EMBL_assigned_sequences -o crustaceans_results.fasta
+obi export --fasta-output crustaceans/EMBL_assigned_sequences -o paired_NC_crustaceans_results.fasta
 
 #obi export --tab-output crustaceans/EMBL_aligned_assigned_sequences > crustaceans_results.csv
 
@@ -135,6 +137,6 @@ obi align -t 0.95 fish/EMBL_assigned_sequences fish/EMBL_aligned_assigned_sequen
 obi history -d fish/cleaned_sequences_d1_r.5 > fish_one_view.dot
 
 #export the results out of the obitools3 DMS
-obi export --fasta-output fish/EMBL_assigned_sequences -o fish_results.fasta
+obi export --fasta-output fish/EMBL_assigned_sequences -o paired_NC_fish_results.fasta
 
 #obi export --tab-output fish/EMBL_aligned_assigned_sequences > fish_results.csv
