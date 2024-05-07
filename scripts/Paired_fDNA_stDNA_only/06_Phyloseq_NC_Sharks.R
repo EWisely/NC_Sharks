@@ -2,6 +2,9 @@
 #Author Eldridge Wisely
 
 library(ggplot2)
+library(phyloseq)
+library (vegan)
+library(metagMisc)
 
 #load phyloseq object
 NC_Sharks.ps<-readRDS(file="data/Paired/07_Phyloseq/Paired_NC_Sharks.ps")
@@ -56,6 +59,7 @@ plot_bar(NC_Sharks.ps.med.norm, fill = "family", facet_grid = "Species..scientif
   geom_bar(aes(color=family, fill=family), stat="identity", position="stack")
 ggsave("data/Paired/07_Phyloseq/Faceted_sample_species_prey-family.jpg")
 
+
 #Merge samples by donor species
 NC_Shark_donor_merge.ps <- merge_samples(NC_Sharks.ps, "Species..scientific.name.")
 plot_bar(NC_Shark_donor_merge.ps, fill = "family") + 
@@ -92,6 +96,44 @@ plot_bar(NC_Shark_prey_species_merge.ps, fill = "family") +
 NC_Shark_prey_species_merge.ps
 sample_variables(NC_Shark_prey_species_merge.ps)
 rank_names(NC_Shark_prey_species_merge.ps)
+
+#transform to presence absence per species (and other taxonomic ranks as well)
+NC_Shark_prey_species_merge_pa.ps<-phyloseq_standardize_otu_abundance(NC_Shark_prey_species_merge.ps, method = "pa")
+
+#plot presence/absence data
+plot_bar(NC_Shark_prey_species_merge_pa.ps, fill = "genus", x="Species..scientific.name.",facet_grid = "material" )+
+  geom_bar(aes(color=genus, fill=genus), stat="identity", position = "stack")+
+  ylab("Number of samples")
+ggsave("data/Paired/07_Phyloseq/PA_paired_by_genus_stacked.jpg")
+
+#now plot presence absence FOO by species without NAs
+NC_Shark_prey_species_merge_sp.ps <- tax_glom(NC_Sharks.ps, taxrank = "species", NArm = TRUE)
+NC_Shark_prey_species_merge_sp_pa.ps<-phyloseq_standardize_otu_abundance(NC_Shark_prey_species_merge_sp.ps, method = "pa")
+plot_bar(NC_Shark_prey_species_merge_sp_pa.ps, fill = "species", x="Species..scientific.name.",facet_grid = "material" )+
+  geom_bar(aes(color=species, fill=species), stat="identity", position = "stack")+
+  ylab("Number of samples")
+ggsave("data/Paired/07_Phyloseq/PA_paired_by_species_stacked.jpg")
+
+
+#plot presence/absence data
+plot_bar(NC_Shark_prey_species_merge_pa.ps, fill = "species", x="Species..scientific.name.",facet_grid = "material" )+
+  geom_bar(aes(color=species, fill=species), stat="identity", position = "stack")+
+  ylab("Number of samples")
+ggsave("data/Paired/07_Phyloseq/PA_paired_by_species_stacked.jpg")
+
+
+#different view of the presence/absence data
+plot_bar(NC_Shark_prey_species_merge_pa.ps, x="genus", fill = "genus", facet_grid = Species..scientific.name.~material) +
+  geom_bar(aes(color=genus, fill=genus), stat="identity", position="stack")+
+  ylab("Number of samples")
+ggsave("data/Paired/07_Phyloseq/PA_paired_by_genus.jpg")
+
+
+
+
+
+
+
 
 #export read table with species or genus (if only genus available) instead of motu/asv now that they've been properly merged
 taxtbl <- as.data.frame(tax_table(NC_Shark_prey_species_merge.ps))
@@ -135,10 +177,9 @@ write.csv(df3, "data/Paired/07_Phyloseq/NC_Sharks_paired_samples_by_species_comb
 #tax_table()   Taxonomy Table:    [ 53 taxa by 7 taxonomic ranks ]
 
 #Make a subset with only paired fecals/stomachs
-NC_Sharks_paired.ps<-subset_samples(NC_Sharks.ps,Paired=="Yes")
-NC_Sharks_paired.ps
 
-paired_ASVs<-as.data.frame(NC_Sharks_paired.ps@tax_table)
+
+paired_ASVs<-as.data.frame(NC_Sharks.ps@tax_table)
 library(tidyverse)
 
 paired_ASVs<-paired_ASVs%>%
@@ -156,9 +197,9 @@ range(summary_paired_ASVs$number_of_ASVs)
 write.csv(summary_paired_ASVs, file= "data/Paired/07_Phyloseq/summary_ASVs_per_taxon_paired.csv")
 
 
-NC_Shark_prey_species_merge_paired.ps<-subset_samples(NC_Shark_prey_species_merge.ps,Paired=="Yes")
+#NC_Shark_prey_species_merge_paired.ps<-subset_samples(NC_Shark_prey_species_merge.ps,Paired=="Yes")
 
-NC_Shark_prey_species_merge_paired.ps
+NC_Shark_prey_species_merge_paired.ps<-NC_Shark_prey_species_merge.ps
 
 plot_richness(NC_Shark_prey_species_merge.ps, x="Species..scientific.name.","material", measures=c("Shannon", "Simpson"), color="Species..scientific.name.")
 
@@ -204,10 +245,11 @@ NC_Sharks.ps.species.med.norm
 
 #Make Sorensen Similarity violin plot from paired fecal/stomach samples normalized to median sequencing depth... merged by prey species.
 
-NC_Shark_prey_species_merge_med.norm.paired.ps<-subset_samples(NC_Sharks.ps.species.med.norm,Paired=="Yes")
+#NC_Shark_prey_species_merge_med.norm.paired.ps<-subset_samples(NC_Sharks.ps.species.med.norm,Paired=="Yes")
+NC_Shark_prey_species_merge_med.norm.paired.ps<-NC_Sharks.ps.species.med.norm
 
 NC_Shark_prey_species_merge_med.norm.paired.ps
-View(sample_data(NC_Shark_prey_species_merge_med.norm.paired.ps))
+#View(sample_data(NC_Shark_prey_species_merge_med.norm.paired.ps))
 
 # Transform data to proportions as appropriate for Bray-Curtis distances
 #NC_Sharks.ps.prop <- transform_sample_counts(NC_Sharks.ps, function(otu) otu/sum(otu))
@@ -251,8 +293,8 @@ NC_Sharks.ps.species1.med.norm = transform_sample_counts(NC_Shark_prey_species_m
 
 #subset the paired samples
 
-NC_Sharks.ps.species1.med.norm.paired.ps<-subset_samples(NC_Sharks.ps.species1.med.norm,Paired=="Yes")
-NC_Sharks.ps.species1.med.norm.paired.ps
+#NC_Sharks.ps.species1.med.norm.paired.ps<-subset_samples(NC_Sharks.ps.species1.med.norm,Paired=="Yes")
+NC_Sharks.ps.species1.med.norm.paired.ps<-NC_Sharks.ps.species1.med.norm
 
 #extract matching fecal and stomach samples by Shark ID
 library(tidyverse)
@@ -334,8 +376,8 @@ NC_Sharks.ps.genus.med.norm
 
 #Get just the fecal and stomach paired samples
 
-NC_Shark_prey_genus_merge_med.norm.paired.ps<-subset_samples(NC_Sharks.ps.genus.med.norm,Paired=="Yes")
-NC_Shark_prey_genus_merge_med.norm.paired.ps
+#NC_Shark_prey_genus_merge_med.norm.paired.ps<-subset_samples(NC_Sharks.ps.genus.med.norm,Paired=="Yes")
+NC_Shark_prey_genus_merge_med.norm.paired.ps<-NC_Sharks.ps.genus.med.norm
 #re-do Sorensen distances for the genus phyloseq object
 
 genus_matched_fs_and_sts<- sample_data(NC_Shark_prey_genus_merge_med.norm.paired.ps)[,c("sample_id","material")]
@@ -496,8 +538,8 @@ NC_Sharks.ps.order.med.norm
 
 #Get just the fecal and stomach paired samples
 
-NC_Shark_prey_order_merge_med.norm.paired.ps<-subset_samples(NC_Sharks.ps.order.med.norm,Paired=="Yes")
-NC_Shark_prey_order_merge_med.norm.paired.ps
+#NC_Shark_prey_order_merge_med.norm.paired.ps<-subset_samples(NC_Sharks.ps.order.med.norm,Paired=="Yes")
+NC_Shark_prey_order_merge_med.norm.paired.ps<-NC_Sharks.ps.order.med.norm
 #re-do Sorensen distances for the order phyloseq object
 
 order_matched_fs_and_sts<- sample_data(NC_Shark_prey_order_merge_med.norm.paired.ps)[,c("sample_id","material")]
