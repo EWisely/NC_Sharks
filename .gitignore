@@ -10,3 +10,4 @@ data/*/*
 *.dmp
 *.sqlite
 All_NC_Sharks_Data/
+lulu.log*
