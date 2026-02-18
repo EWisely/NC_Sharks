@@ -9,5 +9,5 @@ data/*/*.fastq
 data/*/*
 *.dmp
 *.sqlite
-All_NC_Sharks_Data/
+All_NC_Sharks_Data/data/*
 lulu.log*
