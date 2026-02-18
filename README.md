@@ -1,5 +1,5 @@
 # NC_Sharks [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10397880.svg)](https://doi.org/10.5281/zenodo.10397880)
-Here is the code used in NC_Sharks project [^1] for shark diet metabarcoding from fecal swabs and stomach contents. The laboratory protocol for creating these data can be found on protocols.io at DOI: dx.doi.org/10.17504/protocols.io.ewov1qxokgr2/v1.[^2] The raw data and metadata for the paired fecal and stomach samples can be downloaded from Figshare: (link will be published upon publication).  This github repo covers the analysis steps and contains 6 scripts to be used in order.
+Here is the code used in NC_Sharks project [^1] for shark diet metabarcoding from fecal swabs and stomach contents. The laboratory protocol for creating these data can be found on protocols.io at DOI: (anonymized for peer review) [^2] The raw data and metadata for the paired fecal and stomach samples can be downloaded from Figshare: (link will be published upon publication).  This github repo covers the analysis steps and contains 6 scripts to be used in order.
 
 Each script contains commented lines that will help to understand what each section of code does, and these comments point out key parameters which should be edited to adapt to different analyses and projects.
 
@@ -14,7 +14,7 @@ Each script contains commented lines that will help to understand what each sect
 
 
 [^1]: This paper (Anonymized for review. Add citation upon publication)
-[^2]: The protocol on protocols.io.  (Anonymized for review. Add doi upon publication)
+[^2]: The protocol on protocols.io.  (Anonymized for review. Add citation upon publication)
 [^3]: Miya, M., Y. Sato, T. Fukunaga, T. Sado, J. Y. Poulsen, K. Sato, T. Minamoto, et al. 2015. “MiFish, a Set of Universal PCR Primers for Metabarcoding Environmental DNA from Fishes: Detection of More Than 230 Subtropical Marine Species.” Royal Society Open Science 2 (7): 150088. https://doi.org/10.1098/rsos.150088.
 [^4]: Berry, Tina E., Benjamin J. Saunders, Megan L. Coghlan, Michael Stat, Simon Jarman, Anthony J. Richardson, Claire H. Davies, Oliver Berry, Euan S. Harvey, and Michael Bunce. 2019. “Marine Environmental DNA Biomonitoring Reveals Seasonal Patterns in Biodiversity and Identifies Ecosystem Responses to Anomalous Climatic Events.” PLoS Genetics 15 (2). https://doi.org/10.1371/journal.pgen.1007943.
 [^5]: Glenn, Travis C., Todd W. Pierson, Natalia J. Bayona-Vásquez, Troy J. Kieran, Sandra L. Hoffberg, Jesse C. Thomas, Daniel E. Lefever, et al. 2019. “Adapterama II: Universal Amplicon Sequencing on Illumina Platforms (TaggiMatrix).” PeerJ 2019 (10). https://doi.org/10.7717/peerj.7786.
